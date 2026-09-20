@@ -701,6 +701,7 @@ void LoadMeleeMenu(){
  oneShotMenuSet=(MeleeSetFn)GetProcAddress(module,"DideMeleeOneShotSet");
  chainMenuState=(MeleeStateFn)GetProcAddress(module,"DideMeleeChainState");
  chainMenuSet=(MeleeSetFn)GetProcAddress(module,"DideMeleeChainSet");
+ meleeFovSync=(MeleeFovSyncFn)GetProcAddress(module,"DideMeleeSyncFov");
  Log(meleeMenuState&&meleeMenuSet&&meleeMenuStop?"MELEE_MENU_CONNECTED":"MELEE_MENU_EXPORTS_MISSING");
  Log(oneShotMenuState&&oneShotMenuSet&&chainMenuState&&chainMenuSet?"MELEE_ONESHOT_CHAIN_CONNECTED":"MELEE_ONESHOT_CHAIN_EXPORTS_MISSING");
  *(slash+1)=0;if(wcscat_s(path,L"DideMeleeDurability.dll"))return;
