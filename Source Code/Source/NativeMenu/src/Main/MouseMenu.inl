@@ -5,8 +5,7 @@ struct MenuLayout {float x,y,scale;};
 float MenuHeight(){return 540.f;}
 MenuLayout MenuLayoutFor(float w,float h){float scale=std::min(2.f,std::min((w-24)/720.f,(h-24)/MenuHeight()));scale=std::max(.1f,scale);return {(w-720*scale)*.5f,(h-MenuHeight()*scale)*.5f,scale};}
 int MenuNextTab(int page,int direction){for(int i=0;i<MenuTabCount;i++)if(MenuTabOrder[i]==page)return MenuTabOrder[(i+direction+MenuTabCount)%MenuTabCount];return 0;}
-bool MenuAdjustable(int page,int row){return (page==5&&row>=3&&row<=5)||(page==14&&row==6)||(page==11&&(row==0||row==4))||(page==12&&(row==0||row==1))||(page==1&&row==1)||(page==3&&((row>=1&&row<=3)))||(page==4&&(row==2||row==3||row==8||row==10||row==11))||(page==6&&row>=4&&row<=6)||(page==7)||(page==9&&(row==3||row==4||row==7));}                                                                                                           
-float MenuRowHeight(int page){return 32.f;}
+bool MenuAdjustable(int page,int row){return (page==5&&row>=3&&row<=5)||(page==14&&row==6)||(page==11&&(row==0||row==4))||(page==12&&(row==0||row==1))||(page==1&&row==1)||(page==3&&((row>=1&&row<=3)))||(page==4&&(row==2||row==3||row==8||row==10||row==11))||(page==6&&row>=4&&row<=6)||(page==7)||(page==9&&(row==3||row==4||row==7));}float MenuRowHeight(int page){return 32.f;}
 std::atomic<HWND> menuWindow{nullptr};WNDPROC menuPreviousProc=nullptr;
 std::atomic<unsigned> menuLegacyButtonEvents{0};
 std::atomic_int menuMouseClick{0},menuMouseWheel{0};std::atomic_bool menuLeftHeld{false};
