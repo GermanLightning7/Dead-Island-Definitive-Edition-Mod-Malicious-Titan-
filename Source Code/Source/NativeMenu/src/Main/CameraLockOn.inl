@@ -114,6 +114,7 @@ void InjectBufferedMouseData(void*raw,DWORD*count,DWORD capacity){
  auto add=[&](DWORD axis,LONG value){if(!value)return;data[n]={};data[n].dwOfs=axis;data[n].dwData=(DWORD)value;data[n].dwTimeStamp=stamp;data[n].dwSequence=n?data[n-1].dwSequence+1:1;++n;};
  add(DIMOFS_X,dx);add(DIMOFS_Y,dy);*count=n;
 }
+void ChangeSmoothing(int delta){smoothing=std::clamp(smoothing.load()+delta,1,10);SetStatus("AIMBOT SMOOTHING UPDATED");}
 void Install(){Log("CAMERA_LOCK_ON_READY_DISABLED_FRESH_POSE_SINGLE_USE_BODY_ONLY_SPIN_AIM");}
 void Diagnostic(){static ULONGLONG next=0;auto now=GetTickCount64();if(now<next)return;next=now+1000;std::lock_guard<std::mutex>g(sampleMutex);auto&s=diagnosticSample;char line[900];
  sprintf_s(line,"CAMERA_LOCK_ON_DIAG,active=%d,source=%d,priority=%d,body_part=%d,ticks=%llu,applied=%llu,fault=%d,haveError=%d,mode=%d,target=%p,generation=%d,sample_age=%llu,yaw_deg=%.2f,pitch_deg=%.2f,cam=%.3f/%.3f/%.3f,aim=%.3f/%.3f/%.3f,last_dx=%ld,last_dy=%ld,yaw_response=%.6f,pitch_response=%.6f,pose_misses=%llu,lock_changes=%llu,stale_drops=%llu",(int)active.load(),targetSource.load(),AimTargeting::priority.load(),AimTargeting::bodyPart.load(),ticks.load(),appliedTicks.load(),fault.load(),(int)haveError.load(),s.mode,(void*)s.target,s.generation,now-s.stamp,s.yaw*57.29578f,s.pitch*57.29578f,s.pos.x,s.pos.y,s.pos.z,s.aim.x,s.aim.y,s.aim.z,lastDx.load(),lastDy.load(),yawResponse[s.mode].radiansPerCount,pitchResponse[s.mode].radiansPerCount,poseMisses.load(),lockChanges.load(),staleDrops.load());Log(line);
