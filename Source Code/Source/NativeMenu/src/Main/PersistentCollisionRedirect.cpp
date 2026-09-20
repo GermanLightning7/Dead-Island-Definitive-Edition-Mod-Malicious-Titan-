@@ -686,6 +686,8 @@ MeleeStateFn meleeMenuState=nullptr;MeleeSetFn meleeMenuSet=nullptr;MeleeStopFn 
 MeleeStateFn wearMenuState=nullptr;MeleeSetFn wearMenuSet=nullptr;
 MeleeStateFn oneShotMenuState=nullptr;MeleeSetFn oneShotMenuSet=nullptr;
 MeleeStateFn chainMenuState=nullptr;MeleeSetFn chainMenuSet=nullptr;
+using MeleeFovSyncFn=void(*)(int,int,int,int);
+MeleeFovSyncFn meleeFovSync=nullptr;
 void ToggleWearMenu(){if(!wearMenuState||!wearMenuSet){SetStatus("DURABILITY MODULE UNAVAILABLE");return;}int result=wearMenuSet(wearMenuState()==1?0:1);SetStatus(result>=0?"REPAIR QUEUED FOR NEXT MELEE SWING":"DURABILITY MODULE NOT READY");}
 void LoadMeleeMenu(){
  wchar_t path[MAX_PATH]{};DWORD n=GetModuleFileNameW(selfModule,path,MAX_PATH);if(!n||n>=MAX_PATH)return;
