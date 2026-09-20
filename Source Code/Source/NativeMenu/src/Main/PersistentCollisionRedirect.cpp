@@ -1058,15 +1058,16 @@ void HandleMenuAction(int page,int index,bool activate,bool decrease){
   else if(page==3&&index==0&&(activate||decrease)){if(staminaReady){staminaOn=!staminaOn.load();SetStatus(staminaOn?"INFINITE STAMINA ENABLED":"INFINITE STAMINA DISABLED");}}
   else if(page==2&&activate){if(index==0)SkipWaveNative();else CancelWaveNative();}
   else if(page==4&&index==0&&(activate||decrease)){enabled=!enabled.load();SetStatus(enabled?"NATIVE AIM ENABLED":"NATIVE AIM DISABLED");}
-  else if(page==5&&(activate||decrease)){if(index==0&&CameraFeatures::ready)CameraFeatures::third=!CameraFeatures::third.load();else if(index==1)CameraFeatures::SetBounds(!CameraFeatures::bounds.load());else if(index==2&&CameraFeatures::ready)CameraFeatures::customFov=!CameraFeatures::customFov.load();else if(index==3||index==4){auto&setting=index==3?CameraFeatures::firstFov:CameraFeatures::thirdFov;setting=std::clamp(setting.load()+(activate?1:-1),50,120);}else if(index==5)CameraFeatures::distanceCm=std::clamp(CameraFeatures::distanceCm.load()+(activate?25:-25),100,600);else if(index==6)CameraFeatures::Reset();SetStatus("CAMERA SETTINGS UPDATED");}
+  else if(page==5&&(activate||decrease)){if(index==0&&CameraFeatures::ready)CameraFeatures::third=!CameraFeatures::third.load();else if(index==14&&indexCameraFeatures::SetBounds(!CameraFeatures::bounds.load());else if(index==2&&CameraFeatures::ready)CameraFeatures::customFov=!CameraFeatures::customFov.load();else if(index==3||index==4){auto&setting=index==3?CameraFeatures::firstFov:CameraFeatures::thirdFov;setting=std::clamp(setting.load()+(activate?1:-1),50,120);}else if(index==5)CameraFeatures::distanceCm=std::clamp(CameraFeatures::distanceCm.load()+(activate?25:-25),100,600);else if(index==6)CameraFeatures::Reset();SetStatus("CAMERA SETTINGS UPDATED");}
   else if(page==4&&index==1&&(activate||decrease)){fovAimEnabled=!fovAimEnabled.load();SaveNativeSettings();SetStatus(fovAimEnabled?"FOV AIM LIMIT ENABLED":"FULL MAP AIM RESTORED");}
   else if(page==4&&index==2&&(activate||decrease)){int step=(GetAsyncKeyState(VK_SHIFT)&0x8000)?100:25;fovRadiusPixels=std::clamp(fovRadiusPixels.load()+(activate?step:-step),50,800);SaveNativeSettings();SetStatus("FOV RADIUS UPDATED");}
   else if(page==4&&index==3&&(activate||decrease)){AimTargeting::priority=(AimTargeting::priority.load()+(activate?1:2))%3;crosshairPriorityEnabled=AimTargeting::priority.load()==2;CameraLockOn::Clear();SaveNativeSettings();SetStatus(AimTargeting::PriorityLabel());}
   else if(page==4&&index==4&&(activate||decrease)){targetMarkerEnabled=!targetMarkerEnabled.load();SaveNativeSettings();SetStatus(targetMarkerEnabled?"TARGET MARKER ENABLED":"TARGET MARKER DISABLED");}
   else if(page==4&&index==5&&(activate||decrease)){targetSnaplineEnabled=!targetSnaplineEnabled.load();SaveNativeSettings();SetStatus(targetSnaplineEnabled?"TARGET SNAPLINE ENABLED":"TARGET SNAPLINE DISABLED");}
-  else if(page==4&&index==8&&(activate||decrease)){Spinbot::Toggle();}
-  else if(page==4&&index==9&&(activate||decrease)){Spinbot::ChangeSpeed(activate?1:-1);}
-  else if(page==4&&index==10&&(activate||decrease)){AimTargeting::bodyPart=AimTargeting::bodyPart.load()?0:1;CameraLockOn::Clear();SaveNativeSettings();SetStatus(AimTargeting::PartLabel());}
+  else if(page==4&&index==9&&(activate||decrease)){Spinbot::Toggle();}
+  else if(page==4&&index==10&&(activate||decrease)){Spinbot::ChangeSpeed(activate?1:-1);}
+  else if(page==4&&index==11&&(activate||decrease)){AimTargeting::bodyPart=AimTargeting::bodyPart.load()?0:1;CameraLockOn::Clear();SaveNativeSettings();SetStatus(AimTargeting::PartLabel());}
+  else if(page==4&&index==8&&(activate||decrease)){CameraLockOn::ChangeSmoothing(activate?1:-1);}
   else if(page==4&&index==7&&(activate||decrease)){CameraLockOn::targetSource=CameraLockOn::targetSource.load()?0:1;CameraLockOn::Clear();SaveNativeSettings();SetStatus(CameraLockOn::targetSource.load()?"LOCK-ON USES ZOMBIES ONLY":"LOCK-ON USES HOSTILE ROSTER");}
   else if(page==12&&index==0&&(activate||decrease))ChangeSpawnCategory(activate?1:-1);
   else if(page==12&&index==1&&(activate||decrease))ChangeSpawnSelection(activate?1:-1);
