@@ -75,13 +75,24 @@ int MeleeQuery(void*owner,V*origin,V*forward,V*left,V*right,float radius,Contact
  LARGE_INTEGER begin{},end{},freq{};QueryPerformanceCounter(&begin);QueryPerformanceFrequency(&freq);
  bool inputs=origin&&forward&&left&&right&&out&&Read((uintptr_t)origin,o.origin)&&Read((uintptr_t)forward,o.forward)&&Read((uintptr_t)left,o.left)&&Read((uintptr_t)right,o.right)&&Finite(o.origin)&&Unit(o.forward)&&Unit(o.left)&&Unit(o.right)&&std::isfinite(radius)&&radius>.05f&&radius<10.f;
  o.inputsOk=inputs;EspEntity chosen{};V head{};
- if(inputs&&EnumerateAndSelect()){
+if(inputs&&EnumerateAndSelect()){
   float best=2000.f;V cameraRight{},cameraUp{},cameraBack{};float sx=0,sy=0;
   if(ReadD3DCamera(o.camera,cameraRight,cameraUp,cameraBack,sx,sy)){
+   const bool useFov=fovAimEnabled.load(std::memory_order_acquire);
+   const float screenW=(float)presentWidth.load(),screenH=(float)presentHeight.load();
+   const bool fovReady=!useFov||(screenW>0&&screenH>0);
    for(const auto&pair:espRoster){const auto&e=pair.second.entity;V root{};
     if(!MeleeHostile(e,root))continue;
     float distance=Distance(o.camera,root);
-    if(distance>.1f&&distance<best){chosen=e;chosen.root=root;best=distance;}
+    if(distance<=.1f||distance>=best)continue;
+    if(useFov){
+     if(!fovReady)continue;
+     V aimPoint{root.x,root.y+1.55f,root.z};float px=0,py=0;
+     if(!ProjectD3D(aimPoint,o.camera,cameraRight,cameraUp,cameraBack,sx,sy,screenW,screenH,px,py))continue;
+     float dx=px-screenW*.5f,dy=py-screenH*.5f,screenDistance=sqrtf(dx*dx+dy*dy);
+     if(!std::isfinite(screenDistance)||screenDistance>fovRadiusPixels.load())continue;
+    }
+    chosen=e;chosen.root=root;best=distance;
    }
    if(chosen.state){o.state=chosen.state;o.human=chosen.humanType;uintptr_t vt=0;if(Read(chosen.state,vt))o.stateClass=vt-gameBase;if(o.human)Read(chosen.state+0x728,o.alarm);o.target=chosen.complete;o.generation=chosen.generation;o.root=chosen.root;o.distance=best;Read(chosen.state+0x734,o.health);o.pose=NativeMeleePoint(chosen.complete,chosen.root,head);o.head=head;}
   }
@@ -193,6 +204,12 @@ DWORD WINAPI MeleeWorker(void*){
 }
 }
 extern "C" __declspec(dllexport) void DideMeleeSetTick(GameTickFn fn){meleeGameTick=fn;}
+extern "C" __declspec(dllexport) void DideMeleeSyncFov(int enabled,int radiusPixels,int screenWidth,int screenHeight){
+ fovAimEnabled=enabled!=0;
+ fovRadiusPixels=std::clamp(radiusPixels,50,800);
+ presentWidth=(unsigned)std::max(0,screenWidth);
+ presentHeight=(unsigned)std::max(0,screenHeight);
+}
 extern "C" __declspec(dllexport) int DideMeleeState(){return !meleeReady.load()?-1:meleeOn.load()?1:0;}
 extern "C" __declspec(dllexport) int DideMeleeSet(int value){
  if(!value){meleeOn=false;return 0;}
