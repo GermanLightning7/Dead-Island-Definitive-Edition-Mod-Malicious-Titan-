@@ -22,8 +22,10 @@ struct AxisResponse {
  }
  LONG Command(float error)const {
   if(!std::isfinite(error)||std::fabs(error)<=DEADZONE_RAD)return 0;
-  float gain=radiansPerCount>0?.7f/radiansPerCount:64.f;
+  float factor=(float)std::clamp(smoothing.load(),1,10);
+  float gain=(radiansPerCount>0?.7f/radiansPerCount:64.f)/factor;
   float cap=radiansPerCount>0?std::min(64.f,.12f/radiansPerCount):4.f;
+  cap=std::max(cap/factor,1.f);
   float value=std::clamp(error*gain,-cap,cap);
   return (LONG)(value>=0?std::floor(value+.5f):std::ceil(value-.5f));
  }
