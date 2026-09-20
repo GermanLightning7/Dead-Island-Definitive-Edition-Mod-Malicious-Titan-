@@ -4,6 +4,7 @@ namespace AutoFire {bool AimWindow();}
                                                                                       
 namespace CameraLockOn {
 std::atomic_bool active{false},haveError{false};std::atomic_int targetSource{0},fault{0};
+std::atomic_int smoothing{1};
 std::atomic<unsigned long long> ticks{0},appliedTicks{0},staleDrops{0},poseMisses{0},lockChanges{0};
 std::atomic<float>yawError{0},pitchError{0},rawR{0},rawF{0},rawU{0};std::atomic<long>lastDx{0},lastDy{0};
 constexpr float DEADZONE_RAD=.002f;
