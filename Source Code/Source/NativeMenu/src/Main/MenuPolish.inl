@@ -7,7 +7,7 @@ void MenuPanel(std::vector<D3DVertex>&v,float w,float h,float br,float bg,float 
  MenuRound(v,-204,75,198,405,w,h,.105f,.075f,.15f,1);
  AddRect(v,-208,1,716,2,w,h,ar,ag,ab,1);
  MenuRound(v,-190,17,35,35,w,h,.37f,.19f,.56f,1);AddText(v,-180,24,"J",2.1f,w,h,tr,tg,tb);
- AddText(v,-140,16,"Jenta's Special Edition",2.4f,w,h,tr,tg,tb);
+ AddText(v,-140,16,"Malicious Titan's Mod Menu",2.4f,w,h,tr,tg,tb);
  AddText(v,-139,42,"DEAD ISLAND / DEFINITIVE EDITION",.85f,w,h,.73f,.64f,.87f);
  AddText(v,-186,495,"INSERT",1.2f,w,h,ar,ag,ab);AddText(v,-186,514,"OPEN / CLOSE MENU",.85f,w,h,.68f,.60f,.78f);
  MenuRound(v,475,8,26,26,w,h,.24f,.14f,.34f,1);AddText(v,484,17,"X",1.4f,w,h,tr,tg,tb);
